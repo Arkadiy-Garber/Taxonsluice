@@ -117,15 +117,15 @@ parser = argparse.ArgumentParser(
     Developed by Arkadiy Garber; University of Delaware, Geological Sciences
     Please send comments and inquiries to arkg@udel.edu
     '''))
-parser.add_argument('-blank_map', help='Tab-delimited file denoting which blanks correspond to which samples')
-parser.add_argument('-otu_table', help="Mothur-formatted tab-delimited OTU table (with each row corresponding "
+parser.add_argument('-blank_map', type=str, help='Tab-delimited file denoting which blanks correspond to which samples')
+parser.add_argument('-otu_table', type=str, help="Mothur-formatted tab-delimited OTU table (with each row corresponding "
                                        "to either a sample or blank)")
-parser.add_argument('-seq_file', help="FASTA file contained the 16S sequences. Header must contain the Otu #")
-parser.add_argument('-silva_DB', help="SILVA database")
-parser.add_argument('-rare', help="remove OTUs that are represented by less than this number of sequences (default = 2)", default=2)
-parser.add_argument('-t', help="number of threads to use for BLAST (default = 1)", default=1)
-parser.add_argument('-silva_aln', help="how many alignments from the SILVA reference database to keep in the final Flagged OTUs summary file", default="out")
-parser.add_argument('-out_folder', help="Directory to which output files will be written (default = current working directory)", default="out")
+parser.add_argument('-seq_file', type=str, help="FASTA file contained the 16S sequences. Header must contain the Otu #")
+parser.add_argument('-silva_DB', type=str, help="SILVA database")
+parser.add_argument('-rare', type=int, help="remove OTUs that are represented by less than this number of sequences (default = 2)", default=2)
+parser.add_argument('-t', type=int, help="number of threads to use for BLAST (default = 1)", default=1)
+parser.add_argument('-silva_aln', type=int, help="how many alignments from the SILVA reference database to keep in the final Flagged OTUs summary file", default="out")
+parser.add_argument('-out_folder', type=str, help="Directory to which output files will be written (default = current working directory)", default="out")
 args = parser.parse_args()
 
 
@@ -135,7 +135,7 @@ args = parser.parse_args()
 
 
 print("Removing contaminants and \'rare\' OTUs (as defined by the user to be any OTU that is represented by less than "
-      + args.rare + " sequences)")
+      + str(args.rare) + " sequences)")
 BlankDict = defaultdict(lambda: defaultdict(lambda: 'EMPTY'))
 blanks = open(args.blank_map, "r")
 for i in blanks:
@@ -212,7 +212,7 @@ rareOTUs = (derep(sorted(rareOTUs)))
 BlankDict = defaultdict(lambda: defaultdict(lambda: 'EMPTY'))
 blanks = open(args.blank_map, "r")
 for i in blanks:
-    ls = (i.rstrip().split(","))
+    ls = (i.rstrip().split("\t"))
     BlankDict[ls[0]]["id"] = 'env'
     BlankDict[ls[0]]["connection"] = ls[1]
     BlankDict[ls[1]]["id"] = 'blank'
@@ -341,7 +341,7 @@ finalCont = sorted(derep(contaminants))
 
 
 print("Preparing file with flagged OTUs")
-outFlagged = open("/Users/arkadiygarber/Desktop/flaggedOTUs.csv", "w")
+outFlagged = open(args.out_folder + "/flaggedOTUs.csv", "w")
 outFlagged.write("label" + "," + "Group" + "," + "numOtus" + ",")
 for i in finalFlagged:
     outFlagged.write(i + ",")
@@ -362,7 +362,7 @@ outFlagged.close()
 
 
 print("preparing file with non-flagged OTUs")
-outclean = open("/Users/arkadiygarber/Desktop/cleanOTUs.csv", "w")
+outclean = open(args.out_folder + "/cleanOTUs.csv", "w")
 outclean.write("label" + "," + "Group" + "," + "numOtus" + ",")
 for i in finalClean:
     outclean.write(i + ",")
@@ -399,6 +399,7 @@ for i in finalFlagged:
         if re.findall(i, j):
             outfile.write(">" + j + "\n")
             outfile.write(seqs[j] + "\n")
+outfile.close()
 
 print("Building BLAST database file from the SILVA database...")
 os.system("makeblastdb -dbtype nucl -in " + args.silva_DB +
@@ -464,6 +465,7 @@ for i in blastDict.keys():
                     string = replace(string, [","], ";")
                 else:
                     count = 0
-        outfile.write(i + "," + head + "," + identity + "," + cov  + "," + e + "," + string + "\n")
+        outfile.write(i + "," + head + "," + identity + "," + cov + "," + e + "," + string + "\n")
+        print(string)
 
 print("All done!")
