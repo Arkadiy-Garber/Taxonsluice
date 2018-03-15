@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 # !/bin/sh
-# Author: Arkadiy Garber
 from collections import defaultdict
 import re
 import os
@@ -111,11 +110,22 @@ def fasta(fasta_file):
 
 
 parser = argparse.ArgumentParser(
-    prog="accession_translator.py",
+    prog="DCA.py",
     formatter_class=argparse.RawDescriptionHelpFormatter,
     description=textwrap.dedent('''
-    Developed by Arkadiy Garber; University of Delaware, Geological Sciences
+    *******************************************************
+    *******************************************************
+    *******************************************************
+    
+    Developed by Arkadiy Garber^1 and Gustavo Ramiréz^2; 
+    1^University of Delaware, Geological Sciences
+    2^University of Rhode Island, Graduate School of Oceanography
+    
     Please send comments and inquiries to arkg@udel.edu
+    
+    *******************************************************
+    *******************************************************
+    *******************************************************
     '''))
 parser.add_argument('-blank_map', type=str, help='Tab-delimited file denoting which blanks correspond to which samples')
 parser.add_argument('-otu_table', type=str, help="Mothur-formatted tab-delimited OTU table (with each row corresponding "
@@ -124,7 +134,7 @@ parser.add_argument('-seq_file', type=str, help="FASTA file contained the 16S se
 parser.add_argument('-silva_DB', type=str, help="SILVA database")
 parser.add_argument('-rare', type=int, help="remove OTUs that are represented by less than this number of sequences (default = 2)", default=2)
 parser.add_argument('-t', type=int, help="number of threads to use for BLAST (default = 1)", default=1)
-parser.add_argument('-silva_aln', type=int, help="how many alignments from the SILVA reference database to keep in the final Flagged OTUs summary file", default="out")
+parser.add_argument('-silva_aln', type=str, help="how many alignments from the SILVA reference database to keep in the final Flagged OTUs summary file", default="out")
 parser.add_argument('-out_folder', type=str, help="Directory to which output files will be written (default = current working directory)", default="out")
 args = parser.parse_args()
 
@@ -436,7 +446,7 @@ for i in blast:
         count += 1
     count = 0
 
-print("Writing summary file")
+print("Identifying potential contaminants and writing summary file")
 outfile = open(args.out_folder + "/flaggedOtus_annotated.csv", "w")
 outfile.write("OTU" + "," + "silva_match" + "," + "perc_id" + "," + "perc_cov" + "," + "e_value" + "," + "source" + "\n")
 for i in blastDict.keys():
