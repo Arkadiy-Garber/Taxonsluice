@@ -110,7 +110,7 @@ def fasta(fasta_file):
 
 
 parser = argparse.ArgumentParser(
-    prog="DCA.py",
+    prog="cleanmyotus.py",
     formatter_class=argparse.RawDescriptionHelpFormatter,
     description=textwrap.dedent('''
     *******************************************************
