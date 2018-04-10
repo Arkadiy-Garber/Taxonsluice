@@ -1,0 +1,10 @@
+SampleA1	BlankA
+SampleA2	BlankA
+SampleA3	BlankA
+SampleA4	BlankA
+SampleB1	BlankB
+SampleB2	BlankB
+SampleB3	BlankB
+SampleB4	BlankB
+SampleC1	BlankC
+SampleC2	BlankC
