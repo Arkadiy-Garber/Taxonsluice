@@ -7,10 +7,8 @@ import textwrap
 import argparse
 import urllib.request
 import ssl
-from urllib.error import HTTPError
 
 gcontext = ssl.SSLContext(ssl.PROTOCOL_TLSv1)
-
 
 # *************************************************************************
 # ****************** Function Definitions *********************************
@@ -32,7 +30,7 @@ def digitize(string):
             outStr += str(i)
         except ValueError:
             pass
-    return(int(outStr))
+    return (int(outStr))
 
 
 def derep(inList):
@@ -114,30 +112,41 @@ parser = argparse.ArgumentParser(
     formatter_class=argparse.RawDescriptionHelpFormatter,
     description=textwrap.dedent('''
     *******************************************************
-    *******************************************************
-    *******************************************************
-    
+
     Developed by Arkadiy Garber^1 and Gustavo Ramiréz^2; 
     1^University of Delaware, Geological Sciences
     2^University of Rhode Island, Graduate School of Oceanography
-    
+
     Please send comments and inquiries to arkg@udel.edu
-    
-    *******************************************************
-    *******************************************************
+
     *******************************************************
     '''))
-parser.add_argument('-blank_map', type=str, help='Tab-delimited file denoting which blanks correspond to which samples')
-parser.add_argument('-otu_table', type=str, help="Mothur-formatted tab-delimited OTU table (with each row corresponding "
-                                       "to either a sample or blank)")
-parser.add_argument('-seq_file', type=str, help="FASTA file contained the 16S sequences. Header must contain the Otu #")
-parser.add_argument('-silva_DB', type=str, help="SILVA database")
-parser.add_argument('-rare', type=int, help="remove OTUs that are represented by less than this number of sequences (default = 2)", default=2)
-parser.add_argument('-t', type=int, help="number of threads to use for BLAST (default = 1)", default=1)
-parser.add_argument('-silva_aln', type=str, help="how many alignments from the SILVA reference database to keep in the final Flagged OTUs summary file", default="out")
-parser.add_argument('-out_folder', type=str, help="Directory to which output files will be written (default = current working directory)", default="out")
-args = parser.parse_args()
 
+parser.add_argument('-blank_map', type=str, help='Tab-delimited file denoting which blanks correspond to which samples')
+
+parser.add_argument('-otu_table', type=str,
+                    help="Mothur-formatted tab-delimited OTU table (with each row corresponding "
+                         "to either a sample or blank)")
+
+parser.add_argument('-seq_file', type=str, help="FASTA file contained the 16S sequences. Header must contain the Otu #")
+
+parser.add_argument('-silva_DB', type=str, help="SILVA database")
+
+parser.add_argument('-rare', type=int,
+                    help="remove OTUs that are represented by less than this number of sequences (default = 2)",
+                    default=2)
+
+parser.add_argument('-t', type=int, help="number of threads to use for BLASTn (default = 1)", default=1)
+
+parser.add_argument('-silva_aln', type=str,
+                    help="how many alignments from the SILVA reference database to keep in the final Flagged OTUs summary file",
+                    default="out")
+
+parser.add_argument('-out_folder', type=str,
+                    help="Directory to which output files will be written (default = current working directory)",
+                    default="out")
+
+args = parser.parse_args()
 
 # *************************************************************************
 # ************ Contaminant and Rare OTU Identification ********************
@@ -154,7 +163,6 @@ for i in blanks:
     BlankDict[ls[0]]["connection"] = ls[1]
     BlankDict[ls[1]]["id"] = 'blank'
     # BlankDict[ls[1]]["connection"] = ls[0]
-
 
 mothur_output = open(args.otu_table, "r")
 OTUdict = defaultdict(lambda: defaultdict(lambda: 'EMPTY'))
@@ -177,7 +185,6 @@ for line in mothur_output:
                 BlankDict[sample]["Otu" + str(OTU)] = OTUabund
                 otu += 1
                 OTU = stabilityCounter(otu)
-
 
 contaminants = []
 rareOTUs = []
@@ -213,7 +220,6 @@ for i in BlankDict.keys():
 contaminants = (derep(sorted(contaminants)))
 rareOTUs = (derep(sorted(rareOTUs)))
 
-
 # *************************************************************************
 # ****************** Sample-Specific Blank Identification *****************
 # *************************************************************************
@@ -226,7 +232,6 @@ for i in blanks:
     BlankDict[ls[0]]["id"] = 'env'
     BlankDict[ls[0]]["connection"] = ls[1]
     BlankDict[ls[1]]["id"] = 'blank'
-
 
 # ****************************************************************************
 # ********************* OTU Table Transformation *****************************
@@ -261,7 +266,6 @@ for line in mothur_output:
                     otu += 1
                     OTU = stabilityCounter(otu)
 
-
 # ***********************************************************************
 # ******************** Algorithm Implementation *************************
 # ***********************************************************************
@@ -285,7 +289,8 @@ for sample in BlankDict.keys():
                     for sample2 in BlankDict.keys():
                         if BlankDict[sample2]["id"] == "blank" and sample2 != sample:  # Looking for OTU abundances in
                             # non-sample specific blanks
-                            nonSpecificBlank_abund = BlankDict[sample2]["Otu" + str(i)]  # abundance of OTU in non-sample
+                            nonSpecificBlank_abund = BlankDict[sample2][
+                                "Otu" + str(i)]  # abundance of OTU in non-sample
                             # specific blank
                             if int(nonSpecificBlank_abund) == 0:  # If OTU is not present in this blank
                                 pass  # move on to next blank
@@ -338,12 +343,10 @@ for i in rareOTUs:
     if i not in contaminants:
         RareOTUs_final.append(i)
 
-
 finalFlagged = sorted(derep(flaggedOTUs))
 finalClean = sorted(derep(CleanOTUs_final))
 finalRare = sorted(derep(RareOTUs_final))
 finalCont = sorted(derep(contaminants))
-
 
 # ***************************************************************************
 # **************************** Writing outfiles *****************************
@@ -363,13 +366,12 @@ for i in BlankDict.keys():
         outFlagged.write("0.03" + "," + i + "," + str(len(finalFlagged)) + ",")
         lastOTU = (lastItem(finalFlagged))
         length = (digitize(lastOTU))
-        for j in range(1, length+1):
+        for j in range(1, length + 1):
             Otu = "Otu" + str(stabilityCounter(j))
             if Otu in finalFlagged:
                 outFlagged.write(BlankDict[i][Otu] + ",")
         outFlagged.write("\n")
 outFlagged.close()
-
 
 print("preparing file with non-flagged OTUs")
 outclean = open(args.out_folder + "/cleanOTUs.csv", "w")
@@ -384,14 +386,12 @@ for i in BlankDict.keys():
         outclean.write("0.03" + "," + i + "," + str(len(finalClean)) + ",")
         lastOTU = (lastItem(finalClean))
         length = (digitize(lastOTU))
-        for j in range(1, length+1):
+        for j in range(1, length + 1):
             Otu = "Otu" + str(stabilityCounter(j))
             if Otu in finalClean:
                 outclean.write(BlankDict[i][Otu] + ",")
         outclean.write("\n")
 outclean.close()
-
-
 
 # ***************************************************************************
 # ************************ Sequence identification **************************
@@ -400,7 +400,6 @@ outclean.close()
 
 seqs = open(args.seq_file, "r")
 seqs = fasta(seqs)
-
 
 print("Writing flagged OTUs to FASTA file")
 outfile = open(args.out_folder + "/flaggedOTUs.fasta", "w")
@@ -448,7 +447,8 @@ for i in blast:
 
 print("Identifying potential contaminants and writing summary file")
 outfile = open(args.out_folder + "/flaggedOtus_annotated.csv", "w")
-outfile.write("OTU" + "," + "silva_match" + "," + "perc_id" + "," + "perc_cov" + "," + "e_value" + "," + "source" + "\n")
+outfile.write(
+    "OTU" + "," + "silva_match" + "," + "perc_id" + "," + "perc_cov" + "," + "e_value" + "," + "source" + "\n")
 for i in blastDict.keys():
     for j in range(0, 10):
         match = blastDict[i]["match"][j]
@@ -471,7 +471,7 @@ for i in blastDict.keys():
             elif count > 0:
                 if not re.findall(r'/', j):
                     string += (" " + j.split("                   ")[1])
-                    string = string[0:len(string)-1]
+                    string = string[0:len(string) - 1]
                     string = replace(string, [","], ";")
                 else:
                     count = 0
