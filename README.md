@@ -14,7 +14,10 @@ This script takes as input the mothur-formatted tab-delimited OTU table (see sam
 
 This script will run with only these two inputs, and output two files: 
 
--an OTU table with only the OTUs whose abundance in the sample-specific and non-specific-blanks is 10% or less of the abundance in the environmental samples.
+  -an OTU table with only the OTUs whose abundance in the sample-specific and non-specific-blanks is 10% or less of the abundance in the environmental samples.
 
--an OTU table containing sequences that were flagged due to presence within blanks
+  -an OTU table containing sequences that were flagged due to presence within blanks
 
+However, if you provide the script with the location of the SILVA database, and a fasta file containing the OTU sequences, an additional output will include an annotated summary of the OTUs that were flagged. This output will include the closest match to the flagged OTUs in SILVA, the study in which those matches originated, and the source of isolation.
+
+###sample command
