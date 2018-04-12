@@ -140,7 +140,7 @@ parser.add_argument('-t', type=int, help="number of threads to use for BLASTn (d
 
 parser.add_argument('-silva_aln', type=str,
                     help="how many alignments from the SILVA reference database to keep in the final Flagged OTUs summary file",
-                    default="out")
+                    default="10")
 
 parser.add_argument('-out_folder', type=str,
                     help="Directory to which output files will be written (default = current working directory)",
