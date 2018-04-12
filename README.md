@@ -1,9 +1,11 @@
-# DCA
-Heuristic-algorithm for decontamination of OTU tables
+# CleanMyOtus
+Heuristic-algorithm for decontamination of OTU tables.
 
-Tutorial coming soon!
+More detailed tutorial coming soon!
 
 ## Dependencies
 -Python3
 
 -BLAST
+
+## Usage
