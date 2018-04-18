@@ -149,6 +149,21 @@ parser.add_argument('-out_folder', type=str,
 
 args = parser.parse_args()
 
+
+# *************************************************************************
+# ************************** Format Sensing *******************************
+# *************************************************************************
+
+
+blankList = []
+BlankDict = defaultdict(lambda: defaultdict(lambda: 'EMPTY'))
+for i in BlankDict:
+    ls = (i.rstrip().split("\t"))
+    if ls[1] not in blankList:
+        blankList.append(ls[1])
+numBlanks = len(blankList)
+
+
 # *************************************************************************
 # ************ Contaminant and Rare OTU Identification ********************
 # *************************************************************************
@@ -286,48 +301,53 @@ for sample in BlankDict.keys():
                 env_abund = BlankDict[sample]["Otu" + str(i)]  # abundance of OTU in sample.
                 blank_abund = BlankDict[blank]["Otu" + str(i)]  # abundance of OTU in sample-specific blank
                 if int(blank_abund) == 0 and int(env_abund) > 0:  # If the OTU is not present in sample-specific blank
-                    counter = 0  # setting memory variable
-                    for sample2 in BlankDict.keys():
-                        if BlankDict[sample2]["id"] == "blank" and sample2 != sample:  # Looking for OTU abundances in
-                            # non-sample specific blanks
-                            nonSpecificBlank_abund = BlankDict[sample2][
-                                "Otu" + str(i)]  # abundance of OTU in non-sample
-                            # specific blank
-                            if int(nonSpecificBlank_abund) == 0:  # If OTU is not present in this blank
-                                pass  # move on to next blank
-                            else:
-                                if int(nonSpecificBlank_abund) * 10 >= int(env_abund):  # If the OTU is more than
-                                    # 10% abundant in blank, compared with the sample
-                                    if i not in flaggedOTUs:
-                                        flaggedOTUs.append("Otu" + i)
-                                        # Discard OTU if it has not been discarded already.
-                                    counter += 1
-                                    break
-                    if counter == 0:  # if all the non-sample specific blanks were looked at and OTU not discarded
-                        if i not in cleanOTUs:
-                            cleanOTUs.append("Otu" + i)  # OTU is clean
-                        counter = 0  # re-setting memory variable
-
-                else:  # IF OTU is present in sample-specific blank
-                    counter = 0  # setting memory variable
-                    if int(blank_abund) * 10 <= int(env_abund):  # If OTU is 10x more abundant in sample than in blank
-                        for sample2 in BlankDict.keys():  # Looking for OTU in non-sample specific blanks
-                            if BlankDict[sample2]["id"] == "blank" and sample != sample:
-                                nonSpecificBlank_abund = BlankDict[sample2]["Otu" + str(i)]  # abundance of OTU in
-                                # non-sample specific blank
-                                if int(nonSpecificBlank_abund) == 0:  # if OTU not present in this blank
-                                    pass  # do nothing
-                                else:  # if it is...
-                                    # Is the OTU more than 10% abundant in the blank, compared to the sample
-                                    if int(nonSpecificBlank_abund) * 10 >= int(env_abund):
-                                        if i not in flaggedOTUs:  # if it is, discard OTU
+                    if numBlanks > 1:
+                        counter = 0  # setting memory variable
+                        for sample2 in BlankDict.keys():
+                            if BlankDict[sample2]["id"] == "blank" and sample2 != sample:  # Looking for OTU abundances in
+                                # non-sample specific blanks
+                                nonSpecificBlank_abund = BlankDict[sample2][
+                                    "Otu" + str(i)]  # abundance of OTU in non-sample
+                                # specific blank
+                                if int(nonSpecificBlank_abund) == 0:  # If OTU is not present in this blank
+                                    pass  # move on to next blank
+                                else:
+                                    if int(nonSpecificBlank_abund) * 10 >= int(env_abund):  # If the OTU is more than
+                                        # 10% abundant in blank, compared with the sample
+                                        if i not in flaggedOTUs:
                                             flaggedOTUs.append("Otu" + i)
+                                            # Discard OTU if it has not been discarded already.
+                                        counter += 1
                                         break
-
                         if counter == 0:  # if all the non-sample specific blanks were looked at and OTU not discarded
                             if i not in cleanOTUs:
                                 cleanOTUs.append("Otu" + i)  # OTU is clean
                             counter = 0  # re-setting memory variable
+                    else:
+                        cleanOTUs.append("Otu" + i)
+                else:  # IF OTU is present in sample-specific blank
+                    counter = 0  # setting memory variable
+                    if int(blank_abund) * 10 <= int(env_abund):  # If OTU is 10x more abundant in sample than in blank
+                        if numBlanks > 1:
+                            for sample2 in BlankDict.keys():  # Looking for OTU in non-sample specific blanks
+                                if BlankDict[sample2]["id"] == "blank" and sample != sample:
+                                    nonSpecificBlank_abund = BlankDict[sample2]["Otu" + str(i)]  # abundance of OTU in
+                                    # non-sample specific blank
+                                    if int(nonSpecificBlank_abund) == 0:  # if OTU not present in this blank
+                                        pass  # do nothing
+                                    else:  # if it is...
+                                        # Is the OTU more than 10% abundant in the blank, compared to the sample
+                                        if int(nonSpecificBlank_abund) * 10 >= int(env_abund):
+                                            if i not in flaggedOTUs:  # if it is, discard OTU
+                                                flaggedOTUs.append("Otu" + i)
+                                            break
+
+                            if counter == 0:  # if all the non-sample specific blanks were looked at and OTU not discarded
+                                if i not in cleanOTUs:
+                                    cleanOTUs.append("Otu" + i)  # OTU is clean
+                                counter = 0  # re-setting memory variable
+                        else:
+                            cleanOTUs.append("Otu" + i)
                     else:
                         if i not in flaggedOTUs:
                             flaggedOTUs.append("Otu" + i)
