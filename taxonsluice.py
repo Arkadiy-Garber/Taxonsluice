@@ -504,4 +504,5 @@ if args.silva_DB != "NA":
             outfile.write(i + "," + head + "," + identity + "," + cov + "," + e + "," + string + "\n")
     os.system("rm " + args.out_folder + "/OTUblast.txt")
     os.system("rm " + args.out_folder + "/flaggedOTUs.fasta")
+
 print("All done! Thank you for using taxonsluice.")
