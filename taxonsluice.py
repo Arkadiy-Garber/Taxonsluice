@@ -131,9 +131,11 @@ parser.add_argument('-otu_table', type=str,
                          "to either a sample or blank. The sample or blank names in this table must match the "
                          "names provided in the blank_map")
 
-parser.add_argument('-seq_file', type=str, help="FASTA file contained the 16S sequences. Header must contain the Otu #")
+parser.add_argument('-seq_file', type=str, help="FASTA file contained the 16S sequences. Header must contain the Otu #"
+                                                "(Optional, if you want to classify your potential contaminants)")
 
-parser.add_argument('-silva_DB', type=str, help="SILVA database", default="NA")
+parser.add_argument('-silva_DB', type=str, help="SILVA database (provide this if you want to classify your potential "
+                                                "contaminants)", default="NA")
 
 parser.add_argument('-rare', type=int,
                     help="remove OTUs that are represented by less than this number of sequences (default = 2)",
@@ -151,7 +153,6 @@ parser.add_argument('-out_folder', type=str,
 
 args = parser.parse_args()
 
-
 # *************************************************************************
 # ************************** Format Sensing *******************************
 # *************************************************************************
@@ -164,7 +165,6 @@ for i in BlankDict:
     if ls[1] not in blankList:
         blankList.append(ls[1])
 numBlanks = len(blankList)
-
 
 # *************************************************************************
 # ************ Contaminant and Rare OTU Identification ********************
@@ -501,4 +501,4 @@ if args.silva_DB != "NA":
             outfile.write(i + "," + head + "," + identity + "," + cov + "," + e + "," + string + "\n")
             print(string)
 
-    print("All done!")
+print("All done! Thank you for using taxonsluice.")
