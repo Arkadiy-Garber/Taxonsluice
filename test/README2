@@ -1,6 +1,6 @@
 This sample dataset is provided for two reasons:
 first, to make sure the script is functioning properly on your system; 
-second, to give you an idea of what format the files need to be given to the program
+second, to give you an idea of the format the files need to be given to the program.
 
 the files you should fine here are the following:
 OTUseqs.fna (this file contains the representative OTU sequences in FASTA format)
