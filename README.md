@@ -20,6 +20,8 @@ This script will run with only these two inputs, and output two files:
 
 However, if you provide the script with the location of the SILVA database, and a fasta file containing the OTU sequences, an additional output will include an annotated summary of the OTUs that were flagged. This output will include the closest match to the flagged OTUs in SILVA, the study in which those matches originated, and the source of isolation.
 
+The SILVA database can be downloaded from https://www.arb-silva.de/no_cache/download/archive/current/Exports/. The file you should get is "SILVA_132_SSUParc_tax_silva.fasta.gz". As of April 2018, release 132 is the latest release.
+
 ### sample command (with the representative 16S sequences in FASTA format and SILVA database provided for classification of potentially-rare OTUs)
     python3 cleanmyotus.py -blank_map mySamplesToBlanks.txt -otu_table myOTUs.txt -seq_file myOTUs.fasta -silva_DB SILVA_128_SSURef_tax_silva.fasta -rare 5 -t 4 -silva_aln 10 -out_folder /path/to/output/directory/
 
