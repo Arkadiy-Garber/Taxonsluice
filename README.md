@@ -24,4 +24,4 @@ However, if you provide the script with the location of the SILVA database, and 
     python3 cleanmyotus.py -blank_map mySamplesToBlanks.txt -otu_table myOTUs.txt -seq_file myOTUs.fasta -silva_DB SILVA_128_SSURef_tax_silva.fasta -rare 5 -t 4 -silva_aln 10 -out_folder /path/to/output/directory/
 
 ### sample command (simple version without 16S or SILVA dtabase provided)
-    python3 cleanmyotus.py -blank_map mySamplesToBlanks.txt -otu_table myOTUs.txt -rare 5 -t 4 -silva_aln 10 -out_folder /path/to/output/directory/
+    python3 cleanmyotus.py -blank_map mySamplesToBlanks.txt -otu_table myOTUs.txt -rare 5 -out_folder /path/to/output/directory/
