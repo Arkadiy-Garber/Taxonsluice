@@ -23,5 +23,5 @@ However, if you provide the script with the location of the SILVA database, and 
 ### sample command (with the representative 16S sequences in FASTA format and SILVA database provided for classification of potentially-rare OTUs)
     python3 cleanmyotus.py -blank_map mySamplesToBlanks.txt -otu_table myOTUs.txt -seq_file myOTUs.fasta -silva_DB SILVA_128_SSURef_tax_silva.fasta -rare 5 -t 4 -silva_aln 10 -out_folder /path/to/output/directory/
 
-### sample command (simple version without 16S or SILVA dtabase provided)
+### sample command (simple version without 16S or SILVA database provided)
     python3 cleanmyotus.py -blank_map mySamplesToBlanks.txt -otu_table myOTUs.txt -rare 5 -out_folder /path/to/output/directory/
