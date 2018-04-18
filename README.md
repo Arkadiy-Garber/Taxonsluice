@@ -1,7 +1,7 @@
 # CleanMyOtus
 Heuristic-algorithm for decontamination of OTU tables.
 
-More detailed tutorial coming soon!
+More detailed tutorial coming soon! (Please see the 'test' folder for the sample dataset that you can run this program on)
 
 ## Dependencies
 -Python3
