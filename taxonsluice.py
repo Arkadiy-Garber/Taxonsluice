@@ -441,6 +441,9 @@ if args.silva_DB != "NA":
     os.system("blastn -query " + args.out_folder + "/flaggedOTUs.fasta" + " -out " + args.out_folder + "/OTUblast.txt" +
               " -outfmt 6 -evalue 1E-50 -db " + args.silva_DB)
     print("Done with BLAST. Now parsing BLAST output file")
+    os.system("rm " + args.silva_DB + "*.nhr")
+    os.system("rm " + args.silva_DB + "*.nin")
+    os.system("rm " + args.silva_DB + "*.nsq")
 
     nameDict = defaultdict(lambda: defaultdict(lambda: 'EMPTY'))
     silva = open(args.silva_DB, "r")
@@ -499,6 +502,6 @@ if args.silva_DB != "NA":
                     else:
                         count = 0
             outfile.write(i + "," + head + "," + identity + "," + cov + "," + e + "," + string + "\n")
-            print(string)
-
+    os.system("rm " + args.out_folder + "/OTUblast.txt")
+    os.system("rm " + args.out_folder + "/flaggedOTUs.fasta")
 print("All done! Thank you for using taxonsluice.")
