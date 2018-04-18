@@ -10,6 +10,8 @@ import ssl
 
 gcontext = ssl.SSLContext(ssl.PROTOCOL_TLSv1)
 
+#TODO: make default setting for rare OTU definition.
+
 # *************************************************************************
 # ****************** Function Definitions *********************************
 # *************************************************************************
