@@ -115,7 +115,7 @@ parser = argparse.ArgumentParser(
     description=textwrap.dedent('''
     *******************************************************
 
-    Developed by Arkadiy Garber^1 and Gustavo Ramiréz^2; 
+    Developed by Arkadiy Garber^1 and Gustavo Ramírez^2; 
     1^University of Delaware, Geological Sciences
     2^University of Rhode Island, Graduate School of Oceanography
 
