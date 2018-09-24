@@ -23,7 +23,7 @@ However, if you provide the script with the location of the SILVA database, and 
 The SILVA database can be downloaded from https://www.arb-silva.de/no_cache/download/archive/current/Exports/. The file you should get is "SILVA_132_SSUParc_tax_silva.fasta.gz". As of April 2018, release 132 is the latest release.
 
 ### sample command (with the representative 16S sequences in FASTA format and SILVA database provided for classification of potentially-rare OTUs)
-    python3 cleanmyotus.py -blank_map mySamplesToBlanks.txt -otu_table myOTUs.txt -seq_file myOTUs.fasta -silva_DB SILVA_128_SSURef_tax_silva.fasta -rare 5 -t 4 -silva_aln 10 -out_folder /path/to/output/directory/
+    python3 taxonsluice.py -blank_map mySamplesToBlanks.txt -otu_table myOTUs.txt -seq_file myOTUs.fasta -silva_DB SILVA_128_SSURef_tax_silva.fasta -rare 5 -t 4 -silva_aln 10 -out_folder /path/to/output/directory/
 
 ### sample command (simple version without 16S or SILVA database provided)
-    python3 cleanmyotus.py -blank_map mySamplesToBlanks.txt -otu_table myOTUs.txt -rare 5 -out_folder /path/to/output/directory/
+    python3 taxonsluice.py -blank_map mySamplesToBlanks.txt -otu_table myOTUs.txt -rare 5 -out_folder /path/to/output/directory/
