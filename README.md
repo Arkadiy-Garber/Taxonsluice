@@ -32,3 +32,11 @@ The SILVA database can be downloaded from https://www.arb-silva.de/no_cache/down
 
 ### sample command (simple version without 16S or SILVA database provided)
     python3 taxonsluice.py -blank_map mySamplesToBlanks.txt -otu_table myOTUs.txt -rare 5 -out_folder /path/to/output/directory/
+
+# Citing taxnosluice:
+taxonsluice is developed by Gustavo A. Ramírez & Arkadiy Garber in collaboration with Beth N. Orcutt, Bigelow Laboratry for Ocean Sciences, Maine, USA.
+
+This project is still a work in progress, and is involved in a publication currently in review. If it was useful for your work, you can cite it as: Ramírez, G.A., Garber, A.I., and Orcutt, B.N. 2018: taxonsluice, GitHub repository: https://github.com/Arkadiy-Garber/taxonsluice/.
+
+
+Please also cite various dependencies used by taxonsluice.
