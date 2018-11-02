@@ -103,7 +103,7 @@ for i in OTUs:
     id = ls[2]
     otu = ls[0]
     bin = ls[1]
-    if float(id) >= 99.0 and int(align) >= 300 and bin not in binList:
+    if float(id) >= 99.0 and int(align) >= 300 and bin not in binList: # blastn was carried out with 90% minimum query cov.
         outfasta.write(">" + bin + "\n")
         outfasta.write(seqs[bin] + "\n")
         outcsv.write(bin + "," + otu + "," + str(id) + "," + str(align) + "," + str(len(seqs[bin])) + "\n")
