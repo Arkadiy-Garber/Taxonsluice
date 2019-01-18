@@ -202,7 +202,7 @@ for line in mothur_output:
             otu = 1
             OTU = stabilityCounter(otu)
             for OTUabund in ls[firstOTU:]:
-                print(OTUabund)
+                # print(OTUabund)
                 BlankDict[sample]["Otu" + str(OTU)] = OTUabund
                 otu += 1
                 OTU = stabilityCounter(otu)
@@ -230,6 +230,7 @@ for i in BlankDict.keys():
                 if otherSampleOTUabundTotal == 0:
                     count += 1
                     contaminants.append(Otu)
+                    print(str(Otu) + " likely contaminant. Removing...")
             elif int(sampleOTUabund) < int(args.rare):
                 otherSampleOTUabundTotal = int(sampleOTUabund)
                 for otherSamples in BlankDict.keys():
@@ -237,10 +238,12 @@ for i in BlankDict.keys():
                         otherSampleOTUabund = BlankDict[otherSamples][Otu]
                         otherSampleOTUabundTotal += int(otherSampleOTUabund)
                 if otherSampleOTUabundTotal < int(args.rare):
+                    print(str(Otu) + " lower than the \'rare\' threshold of " + str(args.rare))
                     rareOTUs.append(Otu)
 
 contaminants = (derep(sorted(contaminants)))
 rareOTUs = (derep(sorted(rareOTUs)))
+print("finished with rare and contaminant OTUs")
 
 # *************************************************************************
 # ****************** Sample-Specific Blank Identification *****************
@@ -380,9 +383,15 @@ finalCont = sorted(derep(contaminants))
 # **************************** Writing outfiles *****************************
 # ***************************************************************************
 
-
+print("")
 print("Preparing file with flagged OTUs")
-outFlagged = open(args.out_folder + "/flaggedOTUs.csv", "w")
+try:
+    outFlagged = open(args.out_folder + "/flaggedOTUs.csv", "w")
+except FileNotFoundError:
+    os.system("mkdir " + args.out_folder)
+    outFlagged = open(args.out_folder + "/flaggedOTUs.csv", "w")
+
+
 outFlagged.write("label" + "," + "Group" + "," + "numOtus" + ",")
 for i in finalFlagged:
     outFlagged.write(i + ",")
@@ -430,11 +439,7 @@ if args.silva_DB != "NA":
     seqs = fasta(seqs)
 
     print("Writing flagged OTUs to FASTA file")
-    try:
-        outfile = open(args.out_folder + "/flaggedOTUs.fasta", "w")
-    except FileNotFoundError:
-        os.system("mkdir " + args.out_folder)
-        outfile = open(args.out_folder + "/flaggedOTUs.fasta", "w")
+    outfile = open(args.out_folder + "/flaggedOTUs.fasta", "w")
     for i in finalFlagged:
         for j in seqs.keys():
             if re.findall(i, j):
