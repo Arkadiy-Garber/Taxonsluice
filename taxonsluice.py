@@ -238,7 +238,7 @@ for i in BlankDict.keys():
                         otherSampleOTUabund = BlankDict[otherSamples][Otu]
                         otherSampleOTUabundTotal += int(otherSampleOTUabund)
                 if otherSampleOTUabundTotal < int(args.rare):
-                    print(str(Otu) + " lower than the \'rare\' threshold of " + str(args.rare))
+                    print(str(Otu) + " lower than the \'rare\' threshold of " + str(args.rare) + ". Removing...")
                     rareOTUs.append(Otu)
 
 contaminants = (derep(sorted(contaminants)))
@@ -386,47 +386,47 @@ finalCont = sorted(derep(contaminants))
 print("")
 print("Preparing file with flagged OTUs")
 try:
-    outFlagged = open(args.out_folder + "/flaggedOTUs.csv", "w")
+    outFlagged = open(args.out_folder + "/flaggedOTUs.tsv", "w")
 except FileNotFoundError:
     os.system("mkdir " + args.out_folder)
-    outFlagged = open(args.out_folder + "/flaggedOTUs.csv", "w")
+    outFlagged = open(args.out_folder + "/flaggedOTUs.tsv", "w")
 
 
-outFlagged.write("label" + "," + "Group" + "," + "numOtus" + ",")
+outFlagged.write("label" + "\t" + "Group" + "\t" + "numOtus" + "\t")
 for i in finalFlagged:
-    outFlagged.write(i + ",")
+    outFlagged.write(i + "\t")
 outFlagged.write("\n")
 
 for i in BlankDict.keys():
     if BlankDict[i]["id"] == "env":
         sampleOTUs = BlankDict[i]
-        outFlagged.write("0.03" + "," + i + "," + str(len(finalFlagged)) + ",")
+        outFlagged.write("0.03" + "\t" + i + "," + str(len(finalFlagged)) + "\t")
         lastOTU = (lastItem(finalFlagged))
         length = (digitize(lastOTU))
         for j in range(1, length + 1):
             Otu = "Otu" + str(stabilityCounter(j))
             if Otu in finalFlagged:
-                outFlagged.write(BlankDict[i][Otu] + ",")
+                outFlagged.write(BlankDict[i][Otu] + "\t")
         outFlagged.write("\n")
 outFlagged.close()
 
 print("preparing file with non-flagged OTUs")
-outclean = open(args.out_folder + "/cleanOTUs.csv", "w")
-outclean.write("label" + "," + "Group" + "," + "numOtus" + ",")
+outclean = open(args.out_folder + "/cleanOTUs.tsv", "w")
+outclean.write("label" + "\t" + "Group" + "\t" + "numOtus" + "\t")
 for i in finalClean:
-    outclean.write(i + ",")
+    outclean.write(i + "\t")
 outclean.write("\n")
 
 for i in BlankDict.keys():
     if BlankDict[i]["id"] == "env":
         sampleOTUs = BlankDict[i]
-        outclean.write("0.03" + "," + i + "," + str(len(finalClean)) + ",")
+        outclean.write("0.03" + "\t" + i + "\t" + str(len(finalClean)) + "\t")
         lastOTU = (lastItem(finalClean))
         length = (digitize(lastOTU))
         for j in range(1, length + 1):
             Otu = "Otu" + str(stabilityCounter(j))
             if Otu in finalClean:
-                outclean.write(BlankDict[i][Otu] + ",")
+                outclean.write(BlankDict[i][Otu] + "\t")
         outclean.write("\n")
 outclean.close()
 
@@ -452,19 +452,24 @@ if args.silva_DB != "NA":
         testfile = open(args.silva_DB + ".nin")
         testfile = open(args.silva_DB + ".nsq")
         print("BLAST databases found!")
+        print("comparing flagged OTUs against the SILVA database...")
+        os.system("blastn -query " + args.out_folder + "/flaggedOTUs.fasta" + " -out " + args.out_folder + "/OTUblast.txt" +
+            " -outfmt 6 -evalue 1E-50 -db " + args.silva_DB)
+
+        print("Done with BLAST. Now parsing BLAST output file")
 
     except FileNotFoundError:
         print("Building BLAST database file from the SILVA database...")
         os.system("makeblastdb -dbtype nucl -in " + args.silva_DB +
                   " -out " + args.silva_DB)
 
-    print("comparing flagged OTUs against the SILVA database...")
-    os.system("blastn -query " + args.out_folder + "/flaggedOTUs.fasta" + " -out " + args.out_folder + "/OTUblast.txt" +
-              " -outfmt 6 -evalue 1E-50 -db " + args.silva_DB)
-    print("Done with BLAST. Now parsing BLAST output file")
-    os.system("rm " + args.silva_DB + "*.nhr")
-    os.system("rm " + args.silva_DB + "*.nin")
-    os.system("rm " + args.silva_DB + "*.nsq")
+        print("comparing flagged OTUs against the SILVA database...")
+        os.system("blastn -query " + args.out_folder + "/flaggedOTUs.fasta" + " -out " + args.out_folder + "/OTUblast.txt" +
+                  " -outfmt 6 -evalue 1E-50 -db " + args.silva_DB)
+        print("Done with BLAST. Now parsing BLAST output file")
+        os.system("rm " + args.silva_DB + "*.nhr")
+        os.system("rm " + args.silva_DB + "*.nin")
+        os.system("rm " + args.silva_DB + "*.nsq")
 
     nameDict = defaultdict(lambda: defaultdict(lambda: 'EMPTY'))
     silva = open(args.silva_DB, "r")
