@@ -212,7 +212,7 @@ rareOTUs = []
 count = 0
 for i in BlankDict.keys():
     if BlankDict[i]["id"] == "env":
-        print("Analyzing: " + BlankDict[i]["id"])
+        print("Analyzing: " + i)
         sample = (i)
         sampleSpecificBlank = (BlankDict[i]["connection"])
         for j in range(1, otu):
