@@ -177,7 +177,6 @@ BlankDict = defaultdict(lambda: defaultdict(lambda: 'EMPTY'))
 blanks = open(args.blank_map, "r")
 for i in blanks:
     ls = (i.rstrip().split("\t"))
-    print(ls[0])
     BlankDict[ls[0]]["id"] = 'env'
     BlankDict[ls[0]]["connection"] = ls[1]
     BlankDict[ls[1]]["id"] = 'blank'
@@ -188,7 +187,6 @@ OTUdict = defaultdict(lambda: defaultdict(lambda: 'EMPTY'))
 counter = 0
 for line in mothur_output:
     ls = (line.rstrip().split("\t"))
-    print(ls)
     if counter == 0:
         for i in ls:
             if re.findall(r'Otu\d', i):
@@ -196,12 +194,11 @@ for line in mothur_output:
             else:
                 counter += 1
         firstOTU = counter
-        print(firstOTU)
+        # print(firstOTU)
     else:
         sample = ls[1]
-        print(sample)
+        # print(sample)
         if sample in BlankDict.keys():
-            print("wtf")
             otu = 1
             OTU = stabilityCounter(otu)
             for OTUabund in ls[firstOTU:]:
@@ -353,7 +350,7 @@ for sample in BlankDict.keys():
 
                             if counter == 0:  # if all the non-sample specific blanks were looked at and OTU not discarded
                                 if i not in cleanOTUs:
-                                    print("Otu" + i)
+                                    # print("Otu" + i)
                                     cleanOTUs.append("Otu" + i)  # OTU is clean
                                 counter = 0  # re-setting memory variable
                         else:
@@ -433,7 +430,11 @@ if args.silva_DB != "NA":
     seqs = fasta(seqs)
 
     print("Writing flagged OTUs to FASTA file")
-    outfile = open(args.out_folder + "/flaggedOTUs.fasta", "w")
+    try:
+        outfile = open(args.out_folder + "/flaggedOTUs.fasta", "w")
+    except FileNotFoundError:
+        os.system("mkdir " + args.out_folder)
+        outfile = open(args.out_folder + "/flaggedOTUs.fasta", "w")
     for i in finalFlagged:
         for j in seqs.keys():
             if re.findall(i, j):
