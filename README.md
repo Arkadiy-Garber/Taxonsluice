@@ -1,12 +1,7 @@
 # taxonsluice
 Heuristic algorithm for decontamination of OTU tables: The currently accepted input to this program is a mothur-formated OTU table. However, we are currently working on making this tool compatibale with QIIME output and amplicon sequence variants (ASVs).
 
-This tool's decontaminanting power is dependent on the presence of multiple control blanks that are specific to different samples or groups of samples within a study. The tool compares the relative abundance of an OTU in a blank with that of a sample associated with that blank; next, the relative abundance of that OTU is compared across all other blanks and their associated samples. Based on this two-tier comparison strategy, a decision is made to either keep an OTU in the dataset unchecked, or to flag it; flagged OTUs are then compared against the SILVA database using BLAST; an output is then provided summarizing the closest matches to each OTU that was flagged; this output includes the sequence identity, taxanomy, isolation source (if available), and study where the closest-matching amplicons were sequenced.
-
-The user then makes a decision about which, if any, flagged OTUs to allow back into the full dataset. To inform this decision, the user may look at the relative abundance of the OTU in the blanks vs. samples (two OTU tables are also provided in the output: one with only the unflagged sequences, and one with only the flagged sequences); the information obtainined from the closest match in SILVA may also be used. However, we recognize the limitation of using reference sequences in SILVA to inform any decisions regarding potential contaminants, and strongly caution users to take that reference information with a grain of salt.
-
-
-More detailed tutorial coming soon! (Please see the 'test' folder for a sample dataset)
+Please see the Wiki for Taxonsluice for more information on the algorithm, its installation, and a mock community example.
 
 ## Dependencies
 -Python3
