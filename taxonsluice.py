@@ -10,7 +10,7 @@ import ssl
 
 gcontext = ssl.SSLContext(ssl.PROTOCOL_TLSv1)
 
-#TODO: make default setting for rare OTU definition.
+#TODO: what the hell is going on on line 204?
 
 # *************************************************************************
 # ****************** Function Definitions *********************************
@@ -115,9 +115,10 @@ parser = argparse.ArgumentParser(
     description=textwrap.dedent('''
     *******************************************************
 
-    Developed by Gustavo Ramírez^1 and Arkadiy Garber^2; 
-    1^University of Rhode Island, Graduate School of Oceanography
-    2^University of Southern California, Earth Sciences
+    Developed by Arkadiy Garber^1 and Gustavo Ramiréz^2; 
+    1^University of Delaware, Geological Sciences
+    2^University of Rhode Island, Graduate School of Oceanography
+
     Please send comments and inquiries to arkg@udel.edu
 
     *******************************************************
@@ -176,6 +177,7 @@ BlankDict = defaultdict(lambda: defaultdict(lambda: 'EMPTY'))
 blanks = open(args.blank_map, "r")
 for i in blanks:
     ls = (i.rstrip().split("\t"))
+    print(ls[0])
     BlankDict[ls[0]]["id"] = 'env'
     BlankDict[ls[0]]["connection"] = ls[1]
     BlankDict[ls[1]]["id"] = 'blank'
@@ -186,6 +188,7 @@ OTUdict = defaultdict(lambda: defaultdict(lambda: 'EMPTY'))
 counter = 0
 for line in mothur_output:
     ls = (line.rstrip().split("\t"))
+    print(ls)
     if counter == 0:
         for i in ls:
             if re.findall(r'Otu\d', i):
@@ -193,12 +196,16 @@ for line in mothur_output:
             else:
                 counter += 1
         firstOTU = counter
+        print(firstOTU)
     else:
         sample = ls[1]
+        print(sample)
         if sample in BlankDict.keys():
+            print("wtf")
             otu = 1
             OTU = stabilityCounter(otu)
             for OTUabund in ls[firstOTU:]:
+                print(OTUabund)
                 BlankDict[sample]["Otu" + str(OTU)] = OTUabund
                 otu += 1
                 OTU = stabilityCounter(otu)
@@ -234,6 +241,7 @@ for i in BlankDict.keys():
                         otherSampleOTUabundTotal += int(otherSampleOTUabund)
                 if otherSampleOTUabundTotal < int(args.rare):
                     rareOTUs.append(Otu)
+
 contaminants = (derep(sorted(contaminants)))
 rareOTUs = (derep(sorted(rareOTUs)))
 
@@ -345,6 +353,7 @@ for sample in BlankDict.keys():
 
                             if counter == 0:  # if all the non-sample specific blanks were looked at and OTU not discarded
                                 if i not in cleanOTUs:
+                                    print("Otu" + i)
                                     cleanOTUs.append("Otu" + i)  # OTU is clean
                                 counter = 0  # re-setting memory variable
                         else:
@@ -432,9 +441,16 @@ if args.silva_DB != "NA":
                 outfile.write(seqs[j] + "\n")
     outfile.close()
 
-    print("Building BLAST database file from the SILVA database...")
-    os.system("makeblastdb -dbtype nucl -in " + args.silva_DB +
-              " -out " + args.silva_DB)
+    try:
+        testfile = open(args.silva_DB + ".nhr")
+        testfile = open(args.silva_DB + ".nin")
+        testfile = open(args.silva_DB + ".nsq")
+        print("BLAST databases found!")
+
+    except FileNotFoundError:
+        print("Building BLAST database file from the SILVA database...")
+        os.system("makeblastdb -dbtype nucl -in " + args.silva_DB +
+                  " -out " + args.silva_DB)
 
     print("comparing flagged OTUs against the SILVA database...")
     os.system("blastn -query " + args.out_folder + "/flaggedOTUs.fasta" + " -out " + args.out_folder + "/OTUblast.txt" +
