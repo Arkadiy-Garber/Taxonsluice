@@ -212,6 +212,7 @@ rareOTUs = []
 count = 0
 for i in BlankDict.keys():
     if BlankDict[i]["id"] == "env":
+        print("Analyzing: " + BlankDict[i]["id"])
         sample = (i)
         sampleSpecificBlank = (BlankDict[i]["connection"])
         for j in range(1, otu):
@@ -230,7 +231,7 @@ for i in BlankDict.keys():
                 if otherSampleOTUabundTotal == 0:
                     count += 1
                     contaminants.append(Otu)
-                    print(str(Otu) + " likely contaminant. Removing...")
+                    # print(str(Otu) + " likely contaminant. Removing...")
             elif int(sampleOTUabund) < int(args.rare):
                 otherSampleOTUabundTotal = int(sampleOTUabund)
                 for otherSamples in BlankDict.keys():
@@ -238,7 +239,7 @@ for i in BlankDict.keys():
                         otherSampleOTUabund = BlankDict[otherSamples][Otu]
                         otherSampleOTUabundTotal += int(otherSampleOTUabund)
                 if otherSampleOTUabundTotal < int(args.rare):
-                    print(str(Otu) + " lower than the \'rare\' threshold of " + str(args.rare) + ". Removing...")
+                    # print(str(Otu) + " lower than the \'rare\' threshold of " + str(args.rare) + ". Removing...")
                     rareOTUs.append(Otu)
 
 contaminants = (derep(sorted(contaminants)))
