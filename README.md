@@ -1,19 +1,19 @@
 # taxonsluice
 Heuristic algorithm for decontamination of OTU tables: The currently accepted input to this program is a mothur-formated OTU table. However, we are currently working on making this tool compatibale with QIIME output and amplicon sequence variants (ASVs).
 
-Please see the Wiki for Taxonsluice for more information on the algorithm, its installation, and a mock community example.
+### Please see the Wiki for Taxonsluice for more information on the algorithm, its installation, and a mock community example.
 
 ## Citing taxonsluice:
 Ramírez, G. A., Garber, A. I., Lecoeuvre, A., Angelo, T. D., Wheat, C. G., Orcutt, B. N., … Moyer, C. L. (2019). Ecology of Subseafloor Crustal Biofilms, 10(August), 1–17. https://doi.org/10.3389/fmicb.2019.01983
 
 Please also cite various dependencies used by taxonsluice.
 
-## Dependencies
+## Dependencies:
 -Python3
 
 -BLAST
 
-## Usage
+## Usage:
 
 This script takes as input the mothur-formatted tab-delimited OTU table (see sampleOTUtable.txt for specific format of this), as well as a tab-delimited file that maps each sample to a corresponding blank (see sample_blank_map.txt for specific format).
 
