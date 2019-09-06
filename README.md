@@ -3,6 +3,11 @@ Heuristic algorithm for decontamination of OTU tables: The currently accepted in
 
 Please see the Wiki for Taxonsluice for more information on the algorithm, its installation, and a mock community example.
 
+## Citing taxonsluice:
+Ramírez, G. A., Garber, A. I., Lecoeuvre, A., Angelo, T. D., Wheat, C. G., Orcutt, B. N., … Moyer, C. L. (2019). Ecology of Subseafloor Crustal Biofilms, 10(August), 1–17. https://doi.org/10.3389/fmicb.2019.01983
+
+Please also cite various dependencies used by taxonsluice.
+
 ## Dependencies
 -Python3
 
@@ -28,7 +33,3 @@ The SILVA database can be downloaded from https://www.arb-silva.de/no_cache/down
 ### sample command (simple version without 16S or SILVA database provided)
     python3 taxonsluice.py -blank_map mySamplesToBlanks.txt -otu_table myOTUs.txt -rare 5 -out_folder /path/to/output/directory/
 
-# Citing taxonsluice:
-Ramírez, G. A., Garber, A. I., Lecoeuvre, A., Angelo, T. D., Wheat, C. G., Orcutt, B. N., … Moyer, C. L. (2019). Ecology of Subseafloor Crustal Biofilms, 10(August), 1–17. https://doi.org/10.3389/fmicb.2019.01983
-
-Please also cite various dependencies used by taxonsluice.
