@@ -4,7 +4,7 @@ Heuristic algorithm for decontamination of OTU tables: The currently accepted in
 ### Please see the Wiki for Taxonsluice for more information on the algorithm, its installation, and a mock community example.
 
 ## Citing taxonsluice:
-Ramírez, G. A., Garber, A. I., Lecoeuvre, A., Angelo, T. D., Wheat, C. G., Orcutt, B. N., … Moyer, C. L. (2019). Ecology of Subseafloor Crustal Biofilms, 10(August), 1–17. https://doi.org/10.3389/fmicb.2019.01983
+Ramírez, G. A., Garber, A. I., Lecoeuvre, A., Angelo, T. D., Wheat, C. G., Orcutt, B. N. (2019). Ecology of Subseafloor Crustal Biofilms, 10(August), 1–17. https://doi.org/10.3389/fmicb.2019.01983
 
 Please also cite various dependencies used by taxonsluice.
 
