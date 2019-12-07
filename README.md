@@ -10,7 +10,7 @@ Heuristic algorithm for removing likely contaminants from microbiome datasets. T
 
 ## Usage:
 
-This script takes as input the mothur-formatted tab-delimited OTU table (see sampleOTUtable.txt for specific format of this), as well as a tab-delimited file that maps each sample to a corresponding blank (see sample_blank_map.txt for specific format).
+This script takes as input an OTU table that is created by mothur (using the make.shared command: https://www.mothur.org/wiki/MiSeq_SOP#OTUs), as well as a tab-delimited file that maps each sample to a corresponding blank (see sample_blank_map.txt for specific format). The latter file is necessary. However, if you only have one blank for all your samples, you can make this file in the same format, but the second column will only have one value. See sample_blank_map-1blank.txt as an example of how to make the blank map if you only have one blank.
 
 This script will run with only these two inputs, and output two files: 
 
